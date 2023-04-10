@@ -35,6 +35,8 @@ function showNotes() {
                     <div class="card-body">
                         <h5 class="card-title">Note ${index + 1}</h5>
                         <p class="card-text"> ${element}</p>
+                        
+                        <button id="${index}"onclick="editNote(this.id)" class="btn btn-primary">Edt Note</button>
                         <button id="${index}"onclick="deleteNote(this.id)" class="btn btn-primary">Delete Note</button>
                     </div>
                 </div>`;
@@ -62,7 +64,30 @@ function deleteNote(index) {
   localStorage.setItem("notes", JSON.stringify(notesObj));
   showNotes();
 }
+function editNote(index) {
 
+  let notesElm = document.getElementById("notes");
+  
+  let currDiv = notesElm.children[index].children[0];
+  currDiv.innerHTML += `
+    <input type="text" placeholder='add text' id='editInput' class="mt-2 form-control"/>
+    <button onclick="getInputValue(${index})" class="btn btn-success mt-2">Save Note</button>
+  `
+}
+function getInputValue(index){
+  let notes = localStorage.getItem("notes");
+  if (notes == null) {
+    notesObj = [];
+  } else {
+    notesObj = JSON.parse(notes);
+  }
+
+  var inputVal = document.getElementById("editInput").value;
+  notesObj[index] = inputVal;
+  localStorage.setItem("notes", JSON.stringify(notesObj));
+  showNotes();
+
+}
 
 let search = document.getElementById('searchTxt');
 search.addEventListener("input", function(){
